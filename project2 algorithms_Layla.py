@@ -20,7 +20,9 @@ arr_map = [
     [99, 0, 0, 0, 0, 0],
 ]  # 0 is empty space, -1 is barrier, 2 is robot, 99 is goal
 
-def move_forward(blocks):
+def move_backward():
+    pass
+def move_forward():
     pass
 
 def turn_left():
@@ -72,7 +74,7 @@ def wavefrontSearch():
     row_robot, col_robot = findRobot()
     waveShoot()
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
-    min_val = None
+    min_val = 300
     move = ()
     while arr_map[row_robot][col_robot] != 99: 
         for row_direct, col_direct in directions:
@@ -82,14 +84,18 @@ def wavefrontSearch():
                 if arr_map[new_row][new_col] < min_val and arr_map[new_row][new_col] > 0:
                     min_val = arr_map[new_row][new_col]
                     move = (row_direct, col_direct)
-        if move == directions[1]:
+        if move == directions[0]:
+            move_backward()
+        elif move == directions[1]:
             move_forward()
         elif move == directions[2]:
             turn_left()
-            move_forward
+            move_forward()
+            turn_right()
         elif move == directions[3]:
             turn_right()
             move_forward
+            turn_left()
         print(arr_map)
 
         
