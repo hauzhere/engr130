@@ -59,7 +59,7 @@ def waveShoot():
             for row_direct, col_direct in directions:
                 new_row = row + row_direct
                 new_col = col + col_direct
-                if (0 <= new_row < row_size) and (0 <= new_col < col_size) and (arr_map[new_row][new_col] == 0):
+                if (0 <= new_row < row_size) and (0 <= new_col < col_size) and arr_map[new_row][new_col] != -1  and (arr_map[new_row][new_col] == 0):
                     new_position.append((new_row, new_col))
                     arr_map[new_row][new_col] = x
             count += 1
