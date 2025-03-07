@@ -20,8 +20,7 @@ arr_map = [
     [99, 0, 0, 0, 0, 0],
 ]  # 0 is empty space, -1 is barrier, 2 is robot, 99 is goal
 
-def move_backward():
-    pass
+
 def move_forward():
     pass
 
@@ -30,6 +29,13 @@ def turn_left():
 
 def turn_right():
     pass
+
+def move_backward():
+    turn_left()
+    turn_left()
+    move_forward()
+    turn_left()
+    turn_left()
 
 def findGoal():
     for row in range(row_size):
@@ -51,22 +57,27 @@ def waveShoot():
     row_goal, col_goal = findGoal()
     next = [(row_goal, col_goal)]
     x = 1
-    directions = [(-1,0), (1, 0), (0, -1), (0, 1)] #Up, down, right, left
-    count = 0
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+
     while next:
         new_position = []
+        count = 0 
         for row, col in next:
             for row_direct, col_direct in directions:
                 new_row = row + row_direct
                 new_col = col + col_direct
-                if (0 <= new_row < row_size) and (0 <= new_col < col_size) and arr_map[new_row][new_col] != -1  and (arr_map[new_row][new_col] == 0):
+                if (0 <= new_row < row_size) and (0 <= new_col < col_size) and arr_map[new_row][new_col] != -1 and (arr_map[new_row][new_col] == 0):
                     new_position.append((new_row, new_col))
                     arr_map[new_row][new_col] = x
-            count += 1
+            count += 1  
         if count == len(next):
-            next = new_position
-            x += 1
-        
+            next = new_position  
+            x += 1  
+        else:
+            break
+            
+
+       
 def wavefrontSearch():
     row_robot, col_robot = findRobot()
     waveShoot()
@@ -102,8 +113,10 @@ def wavefrontSearch():
         else:
             break
 
-print(arr_map)
+
 wavefrontSearch()
+for row in arr_map:
+    print(row)
 
         
     
