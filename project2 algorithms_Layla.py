@@ -75,7 +75,9 @@ def waveShoot():
             x += 1  
         else:
             break
-            
+waveShoot()
+for row in arr_map:
+    print(row)           
        
 def wavefrontSearch():
     row_robot, col_robot = findRobot()
@@ -111,9 +113,6 @@ def wavefrontSearch():
                 turn_left()
 
 
-wavefrontSearch()
-for row in arr_map:
-    print(row)
 
         
     
