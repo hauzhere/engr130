@@ -76,7 +76,6 @@ def waveShoot():
         else:
             break
             
-
        
 def wavefrontSearch():
     row_robot, col_robot = findRobot()
@@ -110,8 +109,6 @@ def wavefrontSearch():
                 turn_right()
                 move_forward()
                 turn_left()
-        else:
-            break
 
 
 wavefrontSearch()
