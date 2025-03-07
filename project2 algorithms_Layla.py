@@ -70,7 +70,6 @@ def waveShoot():
         print(arr_map)
         
 def wavefrontSearch():
-    row_goal, col_goal = findGoal()
     row_robot, col_robot = findRobot()
     waveShoot()
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
@@ -84,6 +83,7 @@ def wavefrontSearch():
                 if arr_map[new_row][new_col] < min_val and arr_map[new_row][new_col] > 0:
                     min_val = arr_map[new_row][new_col]
                     move = (row_direct, col_direct)
+        row_robot, col_robot = new_row, new_col
         if move == directions[0]:
             move_backward()
         elif move == directions[1]:
@@ -94,9 +94,12 @@ def wavefrontSearch():
             turn_right()
         elif move == directions[3]:
             turn_right()
-            move_forward
+            move_forward()
             turn_left()
         print(arr_map)
+
+
+wavefrontSearch()
 
         
     
