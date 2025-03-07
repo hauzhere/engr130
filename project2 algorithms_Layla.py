@@ -59,7 +59,7 @@ def waveShoot():
             for row_direct, col_direct in directions:
                 new_row = row + row_direct
                 new_col = col + col_direct
-                if (0 <= new_row < row_size) and (0 <= new_col < col_size) and (arr_map[new_row][new_col] != "x") and (arr_map[new_row][new_col] == 0):
+                if (0 <= new_row < row_size) and (0 <= new_col < col_size) and (arr_map[new_row][new_col] == 0):
                     new_position.append((new_row, new_col))
                     arr_map[new_row][new_col] = x
             count += 1
@@ -71,9 +71,11 @@ def wavefrontSearch():
     row_robot, col_robot = findRobot()
     waveShoot()
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
-    min_val = 300
-    move = ()
+   
     while arr_map[row_robot][col_robot] != 99: 
+        move = ()
+        min_val = 300
+
         for row_direct, col_direct in directions:
             new_row = row_robot + row_direct
             new_col = col_robot + col_direct
@@ -81,19 +83,24 @@ def wavefrontSearch():
                 if arr_map[new_row][new_col] < min_val and arr_map[new_row][new_col] > 0:
                     min_val = arr_map[new_row][new_col]
                     move = (row_direct, col_direct)
-        row_robot, col_robot = new_row, new_col
-        if move == directions[0]:
-            move_backward()
-        elif move == directions[1]:
-            move_forward()
-        elif move == directions[2]:
-            turn_left()
-            move_forward()
-            turn_right()
-        elif move == directions[3]:
-            turn_right()
-            move_forward()
-            turn_left()
+        
+        if move:
+            row_robot += move[0]
+            col_robot += move[1]
+            if move == directions[0]:
+                move_backward()
+            elif move == directions[1]:
+                move_forward()
+            elif move == directions[2]:
+                turn_left()
+                move_forward()
+                turn_right()
+            elif move == directions[3]:
+                turn_right()
+                move_forward()
+                turn_left()
+        else:
+            break
 
 print(arr_map)
 wavefrontSearch()
