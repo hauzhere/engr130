@@ -49,7 +49,6 @@ def findRobot():
     
 def waveShoot():
     row_goal, col_goal = findGoal()
-    row_robot, col_robot = findRobot()
     next = [(row_goal, col_goal)]
     x = 1
     directions = [(-1,0), (1, 0), (0, -1), (0, 1)] #Up, down, right, left
@@ -67,7 +66,6 @@ def waveShoot():
         if count == len(next):
             next = new_position
             x += 1
-        print(arr_map)
         
 def wavefrontSearch():
     row_robot, col_robot = findRobot()
@@ -96,9 +94,8 @@ def wavefrontSearch():
             turn_right()
             move_forward()
             turn_left()
-        print(arr_map)
 
-
+print(arr_map)
 wavefrontSearch()
 
         
