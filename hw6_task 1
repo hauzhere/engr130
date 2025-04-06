@@ -1,0 +1,188 @@
+"""
+===============================================================================++
+ENGR 13000 Fall 2024
+
+Program Description
+    Replace this line with a description of your program.
+
+Assignment Information
+    Assignment:     Ind HW6 - PY 6
+    Author:         Layla Le, le306@purdue.edu
+    Team ID:        12
+
+
+Version 
+01.0  py3_task1_template.py - original
+2.0  py3_task1_templateV2.py - Added line to model a method to read in data using numpy's genfromtxt
+    
+ACADEMIC INTEGRITY STATEMENT
+I have not used source code obtained from any other unauthorized
+source, either modified or unmodified. Neither have I provided
+access to my code to another. The project I am submitting
+is my own original work.
+===============================================================================++
+"""
+
+# Write any import statements here (and delete this comment).
+import numpy as np
+# This basic call in genfromtxt will give you a database which is easy to navigate with standard indexing methods.
+data = np.genfromtxt("C:\\Users\\lethu\\Downloads\\list_of_features.csv", delimiter=',', dtype=str)
+
+#1. Start with importing a list of features available for chromosome-to-phenotype mapping using the list_of_features.csv
+#2. Translate the flowchart into a script
+features = []
+genotypes = []
+def myfeature():
+    print("AVAILABLE FEATURES:")
+    for col in data[1:]:
+        feature = col[0].rstrip() 
+        if feature != "":
+            print(feature)
+            features.append(feature)  
+        
+def selectfeature(features):
+    feature = input("Please select a feature: ")
+    while feature not in features:
+        cont = input("Invalid feature. \nWould you like to run again? (y or n)")
+        if cont == "y":     
+            feature = input("Please select a feature: ")
+        else:
+            break
+    if feature in features:
+        return feature
+
+def genotype(feature):
+    print("POSSIBLE GENOTYPES:")
+    for i in range(1, len(data)):
+        if data[i,0].rstrip() == feature:
+            max_gen = int(data[i, 4])
+            for j in range(0, max_gen):
+                print(data[i + j, 3])
+                genotypes.append(data[i + j, 3])          
+
+def phenotype(feature):
+    genotype = input("Please input the genotype: ")
+    if genotype in genotypes:
+        for i in range(1, len(data)):
+            if data[i, 3] == genotype:
+                phenotype = data[i, 5]
+                print("This corresponds to the physical attribute: ", phenotype)
+    if genotype not in genotypes:
+        cont = input("Invalid input. \nWould you like to run again? (y or n)")
+        if cont == "y":     
+            return True
+        else:
+            return False
+def main():
+    cont = True
+    while cont == True:
+        myfeature()
+        feature = selectfeature(features)
+        if feature:
+            genotype(feature)
+            cont = phenotype(feature)
+   
+main()
+Q2 Task 2
+10 Points
+Grading comment:
+2.1 Submit your code here Py3_Task2_username.py
+
+ py3_task2_le306.py
+ Download
+"""
+=++============================================================================++
+ENGR 13000 Fall 2024
+
+Program Description
+    Replace this line with a description of your program.
+
+Assignment Information
+    Assignment:     Ind HW6 - PY 3
+    Author:         Layla Le, le306@purdue.edu
+    Team ID:        12
+
+
+ACADEMIC INTEGRITY STATEMENT
+I have not used source code obtained from any other unauthorized
+source, either modified or unmodified. Neither have I provided
+access to my code to another. The project I am submitting
+is my own original work.
+=++============================================================================++
+"""
+
+# Write any import statements here (and delete this comment).
+import numpy as np
+import operator
+
+# This function will load data from the text file into a Numpy Array
+# You do not need to add or change any code in this funciton
+# Call this function by assigning it to a variable in your main program to access the data
+def load_data():
+    data = np.loadtxt('C:\\Users\\TEMP\\Downloads\\CRNH0203-2022-IN_Bedford_5_WNW.txt', usecols=(1,2,10,11))
+
+    return data
+
+def replace_missing(data):
+    for col in range(2,3):
+        for row in range(len(data)):
+            if data[row, col] == -9999:
+                if row > 0 : 
+                    val_before = data[row - 1, col] 
+                else:
+                    val_before = None
+                if row < len(data) - 1:
+                    val_after = data[row + 1, col] 
+                else:
+                    val_after = None
+                if (val_before != -9999 and val_after != -9999):
+                    data[row,col] = (val_before + val_after) / 2
+                elif operator.xor(val_before != -9999, val_after != -9999):
+                    if val_before == -9999:
+                        data[row,col] = val_after
+                    else:
+                        data[row,col] = val_before
+                else:
+                    for i in range(1, row):
+                        if data[row - i, col] != -9999:
+                            data[row,col] = data[row - i, col]
+    return data
+
+def interpolate(data):
+    new_data = np.zeros((16919,4))
+    i = 0
+    for row in range(len(data)):            
+        if row % 2 == 0:
+            new_data[row,:] = data[i,:]            
+            i += 1
+        else:
+            for col in range(4):
+                new_data[row,0] = new_data[row - 1, 0]
+                new_data[row, 1] += 30
+                new_data[row,col] = (new_data[row - 1, col] + new_data[row + 1, col]) / 2
+    mean_temp = np.mean(new_data[:, 2:4])
+    max_temp = np.max(new_data[:, 2])
+    min_temp = np.min(new_data[:, 3])
+    median_temp = np.median(new_data[:, 2:4])
+    std_temp = np.std(new_data[:, 2:4])
+    print("\nTemperature Statistics:")
+    print(f"Minimum Temperature: {min_temp:.2f}°C")
+    print(f"Maximum Temperature: {max_temp:.2f}°C")
+    print(f"Mean Temperature: {mean_temp:.2f}°C")
+    print(f"Median Temperature: {median_temp:.2f}°C")
+    print(f"Standard Deviation: {std_temp:.2f}°C")
+    return new_data
+
+# This function will save an array as a csv file named "output.csv"
+# in your current working directory.
+# Call this funciton at the end of your main program to save your final
+# array as a csv.
+def export_data(array):
+    np.savetxt('output.csv', array, delimiter=',', fmt=['%d', '%04d', '%.2f', '%.2f'])
+def main():
+    data = load_data()
+    replace_missing(data)
+    new_data = interpolate(data)
+    export_data(new_data)
+
+main()
